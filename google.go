@@ -5,17 +5,6 @@ import (
 	"code.google.com/p/google-api-go-client/plus/v1"
 	"fmt"
 	googleAuth "github.com/alfonsodev/googleauth"
-	ara "github.com/diegogub/aranGO"
-	"os"
-)
-
-var (
-	clientID        = os.Getenv("GOOGLE_CLIENT_ID")
-	clientSecret    = os.Getenv("GOOGLE_CLIENT_SECRET")
-	applicationName = "colmena.io"
-	ARANGO_SERVER   = os.Getenv("ARANGO_PORT")
-	ARANGO_USER     = os.Getenv("ARANGO_USER")
-	ARANGO_PASS     = os.Getenv("ARANGO_PASS")
 )
 
 var config = &oauth.Config{
@@ -33,9 +22,7 @@ var config = &oauth.Config{
 // Save in the database
 // Start a user session
 // Redirect to user home (dashboard)
-func GoogleAuthLogic(code string) {
-
-	s, err := ara.Connect(ARANGO_SERVER, ARANGO_USER, ARANGO_PASS, false)
+func GoogleAuthLogic(code string) bool {
 	accessToken, idToken, err := googleAuth.Exchange(code)
 	gplusID, err := googleAuth.DecodeIdToken(idToken)
 	if err != nil {
@@ -43,13 +30,17 @@ func GoogleAuthLogic(code string) {
 	}
 
 	fmt.Printf("\n Gplus:%+v\n", gplusID)
-	Z = s
-	user, _ := GetByGoogleId(gplusID)
-	if user.Doc.Key == "" {
-		person := getPersonFromToken(accessToken)
-		user := NewUserModel(s)
-		user.Doc.Person = *person
-		user.save()
+	if gplusID != "115601102326911748945" {
+		return false
+	} else {
+		user, _ := GetByGoogleId(gplusID)
+		if user.Doc.Key == "" {
+			person := getPersonFromToken(accessToken)
+			user := NewUserModel()
+			user.Doc.Person = *person
+			user.save()
+		}
+		return true
 	}
 }
 
