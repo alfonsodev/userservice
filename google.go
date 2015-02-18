@@ -5,6 +5,8 @@ import (
 	"code.google.com/p/google-api-go-client/plus/v1"
 	"fmt"
 	googleAuth "github.com/alfonsodev/googleauth"
+	"os"
+	"strings"
 )
 
 var config = &oauth.Config{
@@ -29,8 +31,8 @@ func GoogleAuthLogic(code string) bool {
 		panic(err)
 	}
 
-	fmt.Printf("\n Gplus:%+v\n", gplusID)
-	if gplusID != "115601102326911748945" {
+	fmt.Printf("\n ADMINS:%s=%s\n", os.Getenv("ADMINS"), gplusID)
+	if !strings.Contains(os.Getenv("ADMINS"), gplusID) {
 		return false
 	} else {
 		user, _ := GetByGoogleId(gplusID)
