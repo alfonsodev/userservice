@@ -11,7 +11,7 @@ var (
 	clientID        = os.Getenv("GOOGLE_CLIENT_ID")
 	clientSecret    = os.Getenv("GOOGLE_CLIENT_SECRET")
 	applicationName = ""
-	ARANGO_SERVER   = os.Getenv("ARANGO_PORT")
+	ARANGO_SERVER   = strings.Replace(os.Getenv("ARANGO_PORT"), 'tcp', 'http', -1)
 	ARANGO_USER     = os.Getenv("ARANGO_USER")
 	ARANGO_PASS     = os.Getenv("ARANGO_PASS")
 )
