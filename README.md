@@ -1,4 +1,5 @@
 # User service
+
 ## Package structure
 
 - main.go
@@ -14,3 +15,6 @@ ARANGO_SERVER="http://localhost:8529" go run main.go
 
 ## Supported databases
 - ArangoDB
+## Run the test with
+
+make test
